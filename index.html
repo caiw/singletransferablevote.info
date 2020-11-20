@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Basic Single Transferrable Voting example</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="page">
+	
+	<h1>Single transferrable vote: simple example (no quota)</h1>
+	
+	<div class="abstract">
+		A clearly written guide to conducting and counting an election using the single-transferrable (ranked-choice) vote system, with a fully worked example.
+	</div>
+	
+	<h2>Ballots</h2>
+	
+	<p>In the example, we run an election with <strong>five</strong> candidates (A, B, C, D, E), who are competing to fill <strong>two</strong> positions, and there are <strong>ten</strong> voters.</p>
+	
+	<p>Each voter gets a ballot paper which looks like this:</p>
+	
+	<div class="float-container">
+	<div class="ballot float">
+		<div class="option"><div class="candidate">Candidate A</div><div class="box"></div></div>
+		<div class="option"><div class="candidate">Candidate B</div><div class="box"></div></div>
+		<div class="option"><div class="candidate">Candidate C</div><div class="box"></div></div>
+		<div class="option"><div class="candidate">Candidate D</div><div class="box"></div></div>
+		<div class="option"><div class="candidate">Candidate E</div><div class="box"></div></div>
+	</div>
+	</div>
+	
+	<p>Voters fill in their preference by ranking the candidates 1 to 5, with 1 being the most preferred candidate. For example, for someone whose favourite candidate is Candidate D:</p>
+	
+	<div class="float-container">
+	<div class="ballot float">
+		<div class="option"><span class="candidate">Candidate A</span><span class="box"><div class="box-contents">2</div></span></div>
+		<div class="option"><span class="candidate">Candidate B</span><span class="box"><div class="box-contents">3</div></span></div>
+		<div class="option"><span class="candidate">Candidate C</span><span class="box"><div class="box-contents">5</div></span></div>
+		<div class="option"><span class="candidate">Candidate D</span><span class="box"><div class="box-contents">1</div></span></div>
+		<div class="option"><span class="candidate">Candidate E</span><span class="box"><div class="box-contents">4</div></span></div>
+	</div>
+	</div>
+	
+	<p>(On a real paper ballot, the order of the candidates would be randomised, to prevent people who just fill in “1, 2, 3, 4, 5” top-to-bottom from giving an advantage to the earlier candidates.)</p>
+	
+	<p>In this simple example, all five preferences must be indicated for the vote to be valid.</p>
+	
+	<h2>Counting votes: the theory</h2>
+	
+	<p>The idea is: we proceed in rounds. Each round we count the first-choice (#1) votes for each candidate, and all but one of the candidates go through, selected by those having the most votes.</p>
+	
+	<p>Then, for each ballot paper, the remaining candidates are automatically re-ranked, preserving the preference order.</p>
+	
+	<p>Here is a quick example of what that means. Suppose someone voted like this:</p>
+	
+	<div class="float-container">
+	<div class="float" id="example-vote-before-elimination">
+		<table>
+			<tr>
+				<th>A</th>
+				<th>B</th>
+				<th>C</th>
+				<th>D</th>
+				<th>E</th>
+    		</tr>
+	    	<tr>
+				<td>1</td>
+				<td>3</td>
+				<td>5</td>
+				<td>4</td>
+				<td>2</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	
+	<p>and candidates A, B, C and D go through to the next round.Then Candidate E is no longer available, so remaining ballots are adjusted like this:</p>
+	
+	<div class="float-container">
+	<div class="float" id="example-vote-after-elimination">
+		<table>
+			<tr>
+				<th>A</th> <th>B</th> <th>C</th> <th>D</th> <th>E</th>
+			</tr>
+			<tr>
+				<td>1</td> <td>2</td> <td>4</td> <td>3</td> <td> </td>
+			</tr>
+		</table>
+	</div>
+	</div>
+
+	<p>A is still this voter’s #1 choice; their #2 choice is no longer available, so their new #2 choice is their old #3 choice; their new #3 choice is their old #4 choice; their new #4 choice is their old #5 choice. The remaining four candidates are now ranked 1&ndash;4, with the same preference order as before.</p>
+	
+	<p>We keep going, with one fewer candidate going through each round, until there are the same number of candidates as positions to fill: the remaining candidates have the strongest support overall, and take those positions. In the special case that there is only one position to fill, we can stop when the one candidate has over 50% of the vote.</p>
+	
+	<h2>Counting votes example: Round 1</h2>
+	
+	<p>The ballots are all returned; this is how everybody voted:</p>
+	
+	<div class="float-container">
+	<div class="float votes" id="votes-round-1">
+		<table>
+			<tr>
+				<th>Candidate:</th> <th>A</th> <th>B</th> <th>C</th> <th>D</th> <th>E</th>
+			</tr>
+			<tr>
+				<th>Voter 1</th>  <td class="first">1</td> <td>3</td> <td>5</td> <td>4</td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Voter 2</th>  <td class="first">1</td> <td>3</td> <td>4</td> <td>2</td> <td>5</td>
+			</tr>
+			<tr>
+				<th>Voter 3</th>  <td>5</td> <td>3</td>	<td>2</td> <td>4</td> <td class="first">1</td>
+			</tr>
+			<tr>
+				<th>Voter 4</th>  <td>5</td> <td class="first">1</td> <td>2</td> <td>4</td> <td>3</td>
+			</tr>
+			<tr>
+				<th>Voter 5</th>  <td>2</td> <td class="first">1</td> <td>5</td> <td>4</td> <td>3</td>
+			</tr>
+			<tr>
+				<th>Voter 6</th>  <td class="first">1</td> <td>5</td> <td>2</td> <td>4</td> <td>3</td>
+			</tr>
+			<tr>
+				<th>Voter 7</th>  <td>3</td> <td>4</td>	<td class="first">1</td> <td>5</td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Voter 8</th>  <td>4</td> <td>3</td>	<td>2</td> <td>5</td> <td class="first">1</td>
+			</tr>
+			<tr>
+				<th>Voter 9</th>  <td>2</td> <td>3</td>	<td class="first">1</td> <td>5</td> <td>4</td>
+			</tr>
+			<tr>
+				<th>Voter 10</th> <td>2</td> <td>5</td>	<td>3</td> <td class="first">1</td> <td>4</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	
+	<p>In this table, each row is one voter’s ballot paper, with their numbered preferences, and each column is the votes which each candidate got. The first-choice (#1) votes are highlighted <span class="first">blue</span>.</p>
+	
+	<p>At the end of Round 1, the #1 vote counts are as follows:</p>
+	
+	<div class="float-container">
+	<div class="float winners" id="winners-round-1">
+		<table>
+			<tr>
+				<th>Candidate:</th> <th>A</th> <th>B</th> <th>C</th> <th>D</th> <th>E</th>
+			</tr>
+			<tr>
+				<th>Round 1: #1 votes</th> <td class="winner">3</td> <td class="winner">2</td> <td class="winner">2</td> <td>1</td> <td class="winner">2</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	
+	<p>These are calculated by just counting #1 votes down each column.</p>
+	
+	<p>In this round there were five candidates at the start, and the four with the strongest support go through to the next round. In our example, A, B, C and E go forward (highlighted <span class="winner">yellow</span>).</p>
+	
+	<h2>Counting votes example: Round 2</h2>
+	
+	<p>At the start of the second round we have one fewer candidates. Candidate D is no longer in the race, so they are removed from the ballot papers and everyone has their preferences automatically re-ranked to preserve the preference order.</p>
+	
+	<p>This "adjusting the ballot paper" can feel inappropriate, but it perfectly preserves everyone’s ordered preference for the remaining candidates. There are other mathematically equivalent ways to think about it (such as now counting #2 votes from voters whose #1 preference isn’t available), but the way I’m describing it here just keeps things simple for the purposes of counting.</p>
+	
+	<p>So now the votes for the remaining candidates look like this:</p>
+	
+	<div class="float-container">
+	<div class="float votes" id="votes-round-2">
+		<table>
+			<tr>
+				<th>Candidate:</th> <th>A</th> <th>B</th> <th>C</th> <th>D</th> <th>E</th>
+			</tr>
+			<tr>
+				<th>Voter 1</th>  <td class="first">1</td> <td>3</td> <td>4</td> <td> </td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Voter 2</th>  <td class="first">1</td> <td>2</td> <td>3</td> <td> </td> <td>4</td>
+			</tr>
+			<tr>
+				<th>Voter 3</th>  <td>4</td> <td>3</td>	<td>2</td> <td> </td> <td class="first">1</td>
+			</tr>
+			<tr>
+				<th>Voter 4</th>  <td>4</td> <td class="first">1</td> <td>2</td> <td> </td> <td>3</td>
+			</tr>
+			<tr>
+				<th>Voter 5</th>  <td>2</td> <td class="first">1</td> <td>4</td> <td> </td> <td>3</td>
+			</tr>
+			<tr>
+				<th>Voter 6</th>  <td class="first">1</td> <td>4</td> <td>2</td> <td> </td> <td>3</td>
+			</tr>
+			<tr>
+				<th>Voter 7</th>  <td>3</td> <td>4</td>	<td class="first">1</td> <td> </td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Voter 8</th>  <td>4</td> <td>3</td>	<td>2</td> <td> </td> <td class="first">1</td>
+			</tr>
+			<tr>
+				<th>Voter 9</th>  <td>2</td> <td>3</td>	<td class="first">1</td> <td> </td> <td>4</td>
+			</tr>
+			<tr>
+				<th>Voter 10</th> <td class="first-new">1</td> <td>4</td> <td>2</td> <td> </td> <td>3</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	
+	<p>In <span class="first-new">pink</span>, I’ve highlighted the new #1 vote which has resulted from the re-ranking of remaining candidates.</p>
+	
+	<p>Now again counting the #1 votes for each candidate we get these counts:</p>
+	
+	<div class="float-container">
+	<div class="float winners" id="winners-round-2">
+		<table>
+			<tr>
+				<th>Candidate:</th> <th>A</th> <th>B</th> <th>C</th> <th>D</th> <th>E</th>
+			</tr>
+			<tr>
+				<th>Round 1: #1 votes</th> <td class="winner">3</td> <td class="winner">2</td> <td class="winner">2</td> <td>1</td> <td class="winner">2</td>
+			</tr>
+			<tr>
+				<th>Round 2: #1 votes</th> <td class="winner">4</td> <td>2</td> <td>2</td> <td> </td> <td>2</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	
+	<p>And now the 3 strongest candidates should go through to the next round.</p>
+	
+	<p>However, you’ll notice a problem: Candidate A clearly has the most #1 votes and goes through (yellow highlight), but Candidates B, C and E are tied for second place. So to break the tie we count #2 votes for the tied candidates:</p>
+	
+	<div class="float-container">
+	<div class="float winners" id="winners-round-2-tiebreak">
+		<table>
+			<tr>
+				<th>Candidate:</th> <th>A</th> <th>B</th> <th>C</th> <th>D</th> <th>E</th>
+			</tr>
+			<tr>
+				<th>Round 1: #1 votes</th> <td class="winner">3</td> <td class="winner">2</td> <td class="winner">2</td> <td>1</td> <td class="winner">2</td>
+			</tr>
+			<tr>
+				<th>Round 2: #1 votes</th> <td class="winner">4</td> <td>2</td> <td>2</td> <td> </td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Round 2 TIEBREAK: #2 votes</th> <td class="winner"> </td> <td>1</td> <td class="winner">5</td> <td> </td> <td class="winner">2</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	
+	<p>So now it’s clear that even though Candidates B, C and E were tied for #1 votes, C and E are more voters’ second choice, so they have the strongest overall support and go through alongside Candidate A. (Shown by the <span class="winner">yellow</span> highlights.)</p>
+	
+	<p>In case there are ties for #2 votes too, proceed to counting #3 votes, and so on. If you run out of lower preferences to count and it’s still tied, then there is <em>no difference in voter preference</em> among the tied candidates, so the ones to progress to the next round must be chosen by another method, such as drawing straws (or the digital equivalent).</p>
+	
+	<h2>Counting votes example: Round 3</h2>
+	
+	<p>Again we have one fewer candidates. Like last round, Candidate B is no longer in the race, so like last round we remove them from the ballots and re-rank the remaining candidates:</p>
+	
+	<div class="float-container">
+	<div class="float votes" id="votes-round-3">
+		<table>
+			<tr>
+				<th>Candidate:</th> <th>A</th> <th>B</th> <th>C</th> <th>D</th> <th>E</th>
+			</tr>
+			<tr>
+				<th>Voter 1</th>  <td class="first">1</td> <td> </td> <td>3</td> <td> </td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Voter 2</th>  <td class="first">1</td> <td> </td> <td>2</td> <td> </td> <td>3</td>
+			</tr>
+			<tr>
+				<th>Voter 3</th>  <td>3</td> <td> </td>	<td>2</td> <td> </td> <td class="first">1</td>
+			</tr>
+			<tr>
+				<th>Voter 4</th>  <td>3</td> <td> </td> <td class="first-new">1</td> <td> </td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Voter 5</th>  <td class="first-new">1</td> <td> </td> <td>3</td> <td> </td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Voter 6</th>  <td class="first">1</td> <td> </td> <td>2</td> <td> </td> <td>3</td>
+			</tr>
+			<tr>
+				<th>Voter 7</th>  <td>3</td> <td> </td>	<td class="first">1</td> <td> </td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Voter 8</th>  <td>3</td> <td> </td>	<td>2</td> <td> </td> <td class="first">1</td>
+			</tr>
+			<tr>
+				<th>Voter 9</th>  <td>2</td> <td> </td>	<td class="first">1</td> <td> </td> <td>3</td>
+			</tr>
+			<tr>
+				<th>Voter 10</th> <td class="first">1</td> <td> </td> <td>2</td> <td> </td> <td>3</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	
+	<p>Again I’ve highlighted the existing #1 votes in <span class="first">blue</span> and the new #1 votes for the remaining candidates in <span class="first-new">pink</span>.</p>
+	
+	<p>Now again we count the #1 votes:</p>
+	
+	<div class="float-container">
+	<div class="float winners" id="winners-round-2-tiebreak">
+		<table>
+			<tr>
+				<th>Candidate:</th> <th>A</th> <th>B</th> <th>C</th> <th>D</th> <th>E</th>
+			</tr>
+			<tr>
+				<th>Round 1: #1 votes</th> <td class="winner">3</td> <td class="winner">2</td> <td class="winner">2</td> <td>1</td> <td class="winner">2</td>
+			</tr>
+			<tr>
+				<th>Round 2: #1 votes</th> <td class="winner">4</td> <td>2</td> <td>2</td> <td> </td> <td>2</td>
+			</tr>
+			<tr>
+				<th>Round 2 TIEBREAK: #2 votes</th> <td class="winner"> </td> <td>1</td> <td class="winner">5</td> <td> </td> <td class="winner">2</td>
+			</tr>
+			<tr>
+				<th>Round 3: #1 votes</th> <td class="winner">5</td> <td> </td> <td class="winner">3</td> <td> </td> <td>2</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+	
+	<p>This time there are two clear winners, and no ties. Candidates A and C go through to the next round.</p>
+	
+	<h2>Counting votes example: winners</h2>
+	
+	<p>In this round there are two remaining candidates, and two positions to fill, so we stop.</p>
+	
+	<p>Candidates A and C have the strongest overall support from the voters, and take the positions.</p>
+	
+	<h2>More complex examples</h2>
+	
+	<p>One of the goals of the single-transferrable vote system is to allow voters' greater expressive power, and reduce the need for tactical voting: as well as voting for their favourite candidates, they can also express preference about the remaining candidates.  However one drawback is that it is more complex than one-preference first-past-the-post voting.  There are <a href="https://en.wikipedia.org/wiki/Counting_single_transferable_votes">many variants</a> to single-transferrable voting which allow voters’ aggregate preferences to be even more efficiently represented in the election outcome, at the cost of far more complexity in the counting.  What is presented here is, I think, a good balance between being representative, and being clear, transparent and accessibly explainable in the counting.</p>
+	
+	<div class="epilogue">
+		<p>The source of <a href="singletransferablevote.info">singletransferablevote.info</a> is <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 public domain</a>.</p>
+		<p>If you spot an error, or want to contribute clear guides to the other flavours of single transferable voting, please <a href="https://github.com/caiw/singletransferablevote.info">submit a pull request</a> <span class="inline-note"><a href="https://www.thinkful.com/learn/github-pull-request-tutorial/">what is a pull request?</a></span>.</p>
+		<p><a href="singletransferablevote.info.pdf">Download a PDF version</a> of this page.</p>
+		<p>Last updated 2020-11-20.</p>
+	</div>
+	
+</div>
+</body>
+</html>

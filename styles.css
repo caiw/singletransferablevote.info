@@ -1,0 +1,199 @@
+/* @override http://singletransferablevote.info/styles.css */
+
+body
+{
+	font: 14pt "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+#page
+{
+	max-width: 800px;
+	padding: 0 2em;
+	margin: 0 auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+{
+	font-family: "Adobe Garamond Pro", "Garamond", Georgia, "Times New Roman", Times, serif;
+	font-weight: bold;
+}
+
+h1,
+h2
+{
+	text-align: center;
+	margin-top: 1em;
+}
+
+h2
+{
+	margin-bottom: 0;
+}
+
+p
+{
+	margin: 0 0 0.5em;
+}
+
+a
+{
+	text-decoration: none;
+}
+
+a:hover
+{
+	text-decoration: underline;
+}
+
+.abstract
+{
+	font-style: italic;
+	padding-right: 5em;
+	padding-left: 5em;
+}
+
+.float-container
+{
+	width: 100%;
+	text-align: center;
+}
+
+.float {
+	margin: 0.5em auto;
+	display: inline-block;
+}
+
+.inline-note,
+.inline-note a
+{
+	font-size: small;
+	vertical-align: top;
+}
+
+/* @group Ballot papers */
+
+.ballot
+{
+	border-style: solid;
+	padding: 1em 3em;
+	border-width: 1px;
+}
+
+.ballot .candidate
+{
+	font-family: "Courier New", Courier, mono;
+}
+
+.ballot .candidate,
+.ballot .box
+{
+	display: inline-block;
+}
+
+.ballot .option
+{
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.ballot .box
+{
+	border-style: solid;
+	height: 2em;
+	width: 2em;
+	margin-left: 2em;
+	border-width: 1px;
+	vertical-align: middle;
+}
+
+.ballot .box .box-contents
+{
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+	color: #ff2600;
+}
+
+/* @end */
+
+/* @group Tables */
+
+table
+{
+	border: 1pt solid #000;
+	border-collapse: collapse;
+}
+
+td,
+th
+{
+	border: 0.5pt solid #bec0c2;
+	padding: 0.3em;
+	min-width: 2em;
+	min-height: 2em;
+}
+
+.votes th:nth-child(1),
+.winners th:nth-child(1)
+{
+	border-right-color: #000;
+	border-right-width: 1pt;
+	text-align: left;
+}
+
+.votes tr:nth-child(1),
+.winners tr:nth-child(1)
+{
+	border-bottom: 1pt solid #000;
+}
+
+/* @group Specific tables */
+
+#votes-round-2 th:nth-child(5),
+#votes-round-2 td:nth-child(5)
+{
+	background-color: #e0e0e0;
+	border-style: none;
+}
+
+#votes-round-3 th:nth-child(3),
+#votes-round-3 th:nth-child(5),
+#votes-round-3 td:nth-child(3),
+#votes-round-3 td:nth-child(5)
+{
+	background-color: #e0e0e0;
+	border-style: none;
+}
+
+/* @end */
+
+
+
+.first
+{
+	background-color: #c3e1ff;
+}
+
+.first-new
+{
+	background-color: #fcd3ff;
+}
+
+.winner
+{
+	background-color: #ffea7f;
+}
+
+/* @end */
+
+.epilogue
+{
+	border-top: 1pt solid #c6c6c6;
+	margin-top: 2em;
+	padding-top: 2em;
+}
