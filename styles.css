@@ -154,13 +154,10 @@ th
 
 /* @group Specific tables */
 
+#example-vote-after-elimination th:nth-child(5),
+#example-vote-after-elimination td:nth-child(5),
 #votes-round-2 th:nth-child(5),
-#votes-round-2 td:nth-child(5)
-{
-	background-color: #e0e0e0;
-	border-style: none;
-}
-
+#votes-round-2 td:nth-child(5),
 #votes-round-3 th:nth-child(3),
 #votes-round-3 th:nth-child(5),
 #votes-round-3 td:nth-child(3),
