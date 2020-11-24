@@ -138,18 +138,36 @@ th
 	min-height: 2em;
 }
 
+table th:nth-child(1),
+table td:nth-child(1)
+{
+	border-left-color: #000;
+}
+
+table th:nth-last-child(1),
+table td:nth-last-child(1)
+{
+	border-right-color: #000;
+}
+
+table tr:nth-child(1) th
+{
+	border-top-color: #000;
+	border-bottom-color: #000;
+}
+
+table tr:nth-last-child(1) td,
+table tr:nth-last-child(1) th
+{
+	border-bottom-color: #000;
+}
+
 .votes th:nth-child(1),
 .winners th:nth-child(1)
 {
 	border-right-color: #000;
 	border-right-width: 1pt;
 	text-align: left;
-}
-
-.votes tr:nth-child(1),
-.winners tr:nth-child(1)
-{
-	border-bottom: 1pt solid #000;
 }
 
 /* @group Specific tables */
