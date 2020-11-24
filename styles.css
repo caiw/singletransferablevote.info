@@ -129,8 +129,8 @@ table
 	border-collapse: collapse;
 }
 
-td,
-th
+table td,
+table th
 {
 	border: 0.5pt solid #bec0c2;
 	padding: 0.3em;
@@ -141,24 +141,29 @@ th
 table th:nth-child(1),
 table td:nth-child(1)
 {
+	border-left-style: solid !important;
 	border-left-color: #000;
 }
 
 table th:nth-last-child(1),
 table td:nth-last-child(1)
 {
+	border-right-style: solid !important;
 	border-right-color: #000;
 }
 
 table tr:nth-child(1) th
 {
+	border-top-style: solid !important;
 	border-top-color: #000;
+	border-bottom-style: solid !important;
 	border-bottom-color: #000;
 }
 
 table tr:nth-last-child(1) td,
 table tr:nth-last-child(1) th
 {
+	border-bottom-style: solid !important;
 	border-bottom-color: #000;
 }
 
